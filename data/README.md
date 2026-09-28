@@ -1,5 +1,5 @@
 # CIFAR-10 Dataset
-**EN-US | [PT-BR](data/README-PTBR.md)**
+**EN-US | [PT-BR](/data/README-PTBR.md)**
 
 This repository contains the documentation and details of the **CIFAR-10** dataset used for training, validating, and testing Computer Vision models. CIFAR-10 is a classic dataset of color images labeled into 10 mutually exclusive classes.
 

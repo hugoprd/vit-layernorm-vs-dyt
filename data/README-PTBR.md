@@ -1,5 +1,5 @@
 # CIFAR-10 Dataset
-**[EN-US](data/README.md) | PT-BR**
+**[EN-US](/data/README.md) | PT-BR**
 
 Este repositório contém a documentação e os detalhes do dataset **CIFAR-10** utilizado para o treinamento, validação e teste dos modelos de Visão Computacional. O CIFAR-10 é um conjunto de dados clássico de imagens coloridas rotuladas em 10 classes mutuamente exclusivas.
 
