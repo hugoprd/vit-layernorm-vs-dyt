@@ -59,4 +59,11 @@ The distribution adopted in the pipeline will be:
 
 ---
 
-## 4. Preprocessing and Data Augmentation
+## 4. Processing and Data Augmentation
+
+### 4.1. Normalization
+
+The normalization statistics (`mean = [0.4914, 0.4822, 0.4465]` and `std = [0.2470, 0.2435, 0.2616]`) are derived directly from the canonical empirical analysis of the **CIFAR-10 dataset**, originally collected and published by Alex Krizhevsky, Vinod Nair, and Geoffrey Hinton from the University of Toronto.
+
+* **Origin & Computation:** These exact constants are standard across computer vision literature. They are calculated by aggregating the pixel values across the entire 50,000 training images of CIFAR-10 per color channel (RGB).
+* **Community Standard:** Widely adopted in official PyTorch tutorials, torchvision reference implementations, and academic benchmarks (such as KuangLiu's `pytorch-cifar` repository and mainstream vision transformer implementations) to ensure fair, reproducible, and stable model comparisons.

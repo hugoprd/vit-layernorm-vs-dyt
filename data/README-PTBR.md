@@ -59,5 +59,11 @@ A distribuição adotada no pipeline será:
 
 ---
 
-## 4. Pré-processamento e Data Augmentation
+## 4. Processamento
 
+## 4.1. Normalização
+
+As estatísticas de normalização (`mean = [0.4914, 0.4822, 0.4465]` e `std = [0.2470, 0.2435, 0.2616]`) foram obtidas diretamente a partir da análise empírica canônica do **dataset CIFAR-10**, originalmente coletado e publicado por Alex Krizhevsky, Vinod Nair e Geoffrey Hinton da Universidade de Toronto.
+
+* **Origem e Computação:** Estas constantes exatas são padrão na literatura de visão computacional. Elas são calculadas agregando os valores dos pixels de todas as 50.000 imagens de treino do CIFAR-10 separadamente para cada canal de cor (RGB).
+* **Padrão da Comunidade:** Amplamente adotadas nos tutoriais oficiais do PyTorch, implementações de referência do `torchvision` e benchmarks acadêmicos (como o repositório `pytorch-cifar` de KuangLiu e implementações populares de Vision Transformers) para garantir comparações de modelos justas, reprodutíveis e estáveis.
