@@ -1,0 +1,63 @@
+# CIFAR-10 Dataset
+**[EN-US](data/README.md) | PT-BR**
+
+Este repositório contém a documentação e os detalhes do dataset **CIFAR-10** utilizado para o treinamento, validação e teste dos modelos de Visão Computacional. O CIFAR-10 é um conjunto de dados clássico de imagens coloridas rotuladas em 10 classes mutuamente exclusivas.
+
+## 1. Visão Geral do Dataset
+
+O dataset consiste em 60.000 imagens coloridas com as seguintes características e atributos fundamentais:
+
+*   **Dimensões da Imagem:** 32x32 pixels
+*   **Canais de Cor:** 3 canais (RGB - Red, Green, Blue)
+*   **Shape dos Dados:** 
+    *   *PyTorch:* `[C, H, W]` -> `(3, 32, 32)`
+    *   *Keras/TensorFlow:* `[H, W, C]` -> `(32, 32, 3)`
+*   **Total de Classes:** 10
+*   **Imagens por Classe:** 6.000 imagens 
+*   **Total de Amostras:** 60.000 imagens
+
+## 1.1. Origem dos Dados
+
+Para contular restrições de taxa (*rate limiting*) dos servidores oficiais e garantir uma configuração de ambiente rápida e confiável para todos os contribuidores, o dataset CIFAR-10 é baixado diretamente de seu repositório oficial hospedado pela Universidade de Toronto.
+
+* **URL de Origem:** `https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz`
+* **Mantenedor:** Alex Krizhevsky (Criador do dataset CIFAR-10)
+
+## 2. Classes
+
+As imagens estão distribuídas uniformemente entre as 10 classes abaixo. Não há sobreposição (uma imagem pertence exclusivamente a uma classe):
+
+| ID | Classe | Descrição |
+| :--- | :--- | :--- |
+| 0 | **Airplane** | Aviões (comerciais, caças, etc.) |
+| 1 | **Automobile** | Carros de passeio (sedans, SUVs, etc. Caminhões não entram aqui) |
+| 2 | **Bird** | Pássaros diversos |
+| 3 | **Cat** | Gatos |
+| 4 | **Deer** | Cervos / Veados |
+| 5 | **Dog** | Cachorros |
+| 6 | **Frog** | Sapos / Rãs |
+| 7 | **Horse** | Cavalos |
+| 8 | **Ship** | Navios e barcos |
+| 9 | **Truck** | Caminhões grandes |
+
+---
+
+## 3. Divisão dos Dados (Splits)
+
+O dataset original fornece uma divisão padrão de Treino e Teste. Para garantir uma avaliação robusta e evitar *overfitting* durante as épocas do modelo, o conjunto de treinamento é subdividido para criar o conjunto de validação.
+
+A distribuição adotada no pipeline será:
+
+*   **Treinamento (Train): 45.000 imagens**
+    *   Usado exclusivamente para a atualização dos pesos do modelo via *backpropagation*.
+*   **Validação (Validation): 5.000 imagens**
+    *   Separadas a partir do conjunto de treino original.
+    *   Usado para avaliar o modelo ao final de cada época, ajustar hiperparâmetros (como *learning rate*) e aplicar *Early Stopping*.
+*   **Teste (Test): 10.000 imagens**
+    *   O conjunto de teste oficial do CIFAR-10 (1.000 imagens por classe).
+    *   Usado **apenas uma vez** ao final do projeto para reportar as métricas finais de performance (Acurácia, F1-Score, etc.).
+
+---
+
+## 4. Pré-processamento e Data Augmentation
+
