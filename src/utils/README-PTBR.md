@@ -3,6 +3,12 @@
 
 Este diretório contém os componentes modulares fundamentais (blocos de construção) para os modelos Vision Transformer. Optou-se pela implementação manual e explícita destas camadas, inspiradas nas bibliotecas de referência, como o [torchvision](https://github.com/pytorch/vision/tree/main) — para garantir total transparência do fluxo de tensores, evitando abstrações de "caixa-preta" e permitindo controle absoluto sobre a arquitetura e os hiperparâmetros durante os experimentos.
 
+## Sumário
+
+* [1. Classes](#1-classes)
+    * [1.1. PatchEmbedding](#11-patchembedding)
+    * [1.2. TransformerEncoderBlock](#12-transformerencoderblock)
+
 ## 1. Classes
 
 ### 1.1. PatchEmbedding

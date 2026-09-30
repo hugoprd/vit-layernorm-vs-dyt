@@ -3,6 +3,16 @@
 
 This repository contains the documentation and details of the [CIFAR-10 dataset](https://cave.cs.toronto.edu/kriz/cifar.html) used for training, validating, and testing Computer Vision models. CIFAR-10 is a classic dataset of color images labeled into 10 mutually exclusive classes.
 
+## Table of Contents
+
+* [1. Dataset Overview](#1-dataset-overview)
+    * [1.1. Data Source](#11-data-source)
+* [2. Classes](#2-classes)
+* [3. Data Splits](#3-data-splits)
+* [4. Processing and Data Augmentation](#4-processing-and-data-augmentation)
+    * [4.1. Normalization](#41-normalization)
+    * [4.2. Validation Data Split](#42-validation-data-split)
+
 ## 1. Dataset Overview
 
 The dataset consists of 60,000 color images with the following fundamental characteristics and attributes:
