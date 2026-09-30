@@ -29,3 +29,13 @@ git clone https://github.com/your-username/vit-layernorm-vs-dyt.git
 cd vit-layernorm-vs-dyt
 uv sync
 ```
+
+## 2. Data Pipeline
+
+The project utilizes the **CIFAR-10** dataset (60,000 color images of 32x32 pixels, evenly distributed across 10 classes). To ensure a rigorous experiment and a strictly comparable baseline, the data undergoes a standardized processing pipeline:
+
+*   **Data Splits:** 45,000 images for Training, 5,000 for Validation (deterministically extracted from the original training set using `seed=42`), and 10,000 for the official Test.
+*   **Normalization:** Application of the canonical empirical CIFAR-10 statistics (`mean=[0.4914, 0.4822, 0.4465]`, `std=[0.2470, 0.2435, 0.2616]`) across all subsets to optimize gradient stability.
+*   **Data Augmentation:** Dynamic application of *Random Crop* and *Horizontal Flip* exclusively on the training set.
+
+For in-depth details regarding data origin, class distribution, methodological rationale for normalization, and pipeline script execution, please refer to the **[Comprehensive Data Documentation](data/README.md)**.
