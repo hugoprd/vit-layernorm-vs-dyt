@@ -3,6 +3,8 @@
 
 Uma comparação experimental entre o ViT (LayerNorm) e o ViT (DyT) no dataset CIFAR-10. Este projeto avalia a acurácia, estabilidade de treinamento e o custo computacional entre o Vision Transformer padrão e sua variação sem normalização.
 
+O projeto foi desenvolvido como trabalho de conclusão da disciplina Aprendizagem Profunda (AP) da Universidade Federal do Estado do Rio de Janeiro (UNIRIO) e teve como base fundamental o artigo **Transformers without Normalization** de 2025.
+
 ## Sumário
 
 * [1. Começando](#1-começando)
