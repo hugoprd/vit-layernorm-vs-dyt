@@ -1,7 +1,7 @@
 # CIFAR-10 Dataset
 **[EN-US](/data/README.md) | PT-BR**
 
-Este repositório contém a documentação e os detalhes do dataset **CIFAR-10** utilizado para o treinamento, validação e teste dos modelos de Visão Computacional. O CIFAR-10 é um conjunto de dados clássico de imagens coloridas rotuladas em 10 classes mutuamente exclusivas.
+Este repositório contém a documentação e os detalhes do [dataset CIFAR-10](https://cave.cs.toronto.edu/kriz/cifar.html) utilizado para o treinamento, validação e teste dos modelos de Visão Computacional. O CIFAR-10 é um conjunto de dados clássico de imagens coloridas rotuladas em 10 classes mutuamente exclusivas.
 
 ## 1. Visão Geral do Dataset
 
@@ -67,3 +67,7 @@ As estatísticas de normalização (`mean = [0.4914, 0.4822, 0.4465]` e `std = [
 
 * **Origem e Computação:** Estas constantes exatas são padrão na literatura de visão computacional. Elas são calculadas agregando os valores dos pixels de todas as 50.000 imagens de treino do CIFAR-10 separadamente para cada canal de cor (RGB).
 * **Padrão da Comunidade:** Amplamente adotadas nos tutoriais oficiais do PyTorch, implementações de referência do `torchvision` e benchmarks acadêmicos (como o repositório `pytorch-cifar` de KuangLiu e implementações populares de Vision Transformers) para garantir comparações de modelos justas, reprodutíveis e estáveis.
+
+## 4.2. Separação dos dados de validação
+
+Como o CIFAR-10 não fornece um conjunto de validação nativo, as 5.000 amostras foram extraídas do conjunto de treinamento original (50.000 imagens). Para garantir que a amostra seja representativa e evitar qualquer viés de ordenação, os índices dos dados foram embaralhados aleatoriamente antes da divisão. O processo utiliza uma semente fixa (`seed = 42`) no gerador do PyTorch, assegurando que o embaralhamento e a separação sejam 100% determinísticos e reprodutíveis por qualquer contribuidor.

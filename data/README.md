@@ -1,7 +1,7 @@
 # CIFAR-10 Dataset
 **EN-US | [PT-BR](/data/README-PTBR.md)**
 
-This repository contains the documentation and details of the **CIFAR-10** dataset used for training, validating, and testing Computer Vision models. CIFAR-10 is a classic dataset of color images labeled into 10 mutually exclusive classes.
+This repository contains the documentation and details of the [CIFAR-10 dataset](https://cave.cs.toronto.edu/kriz/cifar.html) used for training, validating, and testing Computer Vision models. CIFAR-10 is a classic dataset of color images labeled into 10 mutually exclusive classes.
 
 ## 1. Dataset Overview
 
@@ -67,3 +67,7 @@ The normalization statistics (`mean = [0.4914, 0.4822, 0.4465]` and `std = [0.24
 
 * **Origin & Computation:** These exact constants are standard across computer vision literature. They are calculated by aggregating the pixel values across the entire 50,000 training images of CIFAR-10 per color channel (RGB).
 * **Community Standard:** Widely adopted in official PyTorch tutorials, torchvision reference implementations, and academic benchmarks (such as KuangLiu's `pytorch-cifar` repository and mainstream vision transformer implementations) to ensure fair, reproducible, and stable model comparisons.
+
+## 4.2. Validation Data Split
+
+Since CIFAR-10 does not provide a native validation set, 5,000 samples were extracted from the original training set (50,000 images). To ensure the sample is representative and to prevent any ordering bias, the data indices were randomly shuffled prior to the split. This process applies a fixed seed (`seed = 42`) to the PyTorch generator, guaranteeing that the shuffling and splitting are 100% deterministic and reproducible by any contributor.
