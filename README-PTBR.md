@@ -3,11 +3,18 @@
 
 Uma comparação experimental entre o ViT (LayerNorm) e o ViT (DyT) no dataset CIFAR-10. Este projeto avalia a acurácia, estabilidade de treinamento e o custo computacional entre o Vision Transformer padrão e sua variação sem normalização.
 
+## Sumário
+
+* [1. Começando](#1-começando)
+    * [1.1. Pré-requisitos](#11-pré-requisitos-instalar-o-uv)
+    * [1.2. Configurando o Repositório](#12-configurando-o-repositório)
+* [2. Pipeline de Dados](#2-pipeline-de-dados)
+
 ## 1. Começando
 
 Este projeto utiliza o [`uv`](https://github.com/astral-sh/uv) como gerenciador de pacotes para garantir um ambiente rápido, padronizado e determinístico para todos os contribuidores.
 
-### 1.1. Pré-requisitos (Instalar o `uv`)
+### 1.1. Pré-requisitos
 **Linux / macOS:**
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
