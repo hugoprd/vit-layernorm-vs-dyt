@@ -34,7 +34,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 Clone the repository and sync the dependencies. You don't need to manually create a virtual environment; `uv` handles it automatically.
 
 ```bash
-git clone https://github.com/your-username/vit-layernorm-vs-dyt.git
+git clone https://github.com/hugoprd/vit-layernorm-vs-dyt.git
 cd vit-layernorm-vs-dyt
 uv sync
 ```
