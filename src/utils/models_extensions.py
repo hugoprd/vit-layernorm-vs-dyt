@@ -1,4 +1,4 @@
-# import torch
+import torch
 import torch.nn as nn
 
 
@@ -74,6 +74,67 @@ class TransformerEncoderBlock(nn.Module):
         x = x + attn_out
 
         # 2. MLP Block: Normalizes -> Applies MLP -> Residual Connection
+        norm_x = self.norm2(x)
+        mlp_out = self.mlp(norm_x)
+        x = x + mlp_out
+
+        return x
+
+
+class DyT(nn.Module):
+    """
+    Dynamic Tanh (DyT) - Proposed at 'Transformers withouts Normalization' (2025) paper.
+    Replace the normalization layers with a dynamic hyperbolic tangent calculation,
+    eliminating the need to compute statistics (mean/variance).
+    """
+
+    def __init__(self, embed_dim):
+        super().__init__()
+        # α (alpha): scalable trainable scalar for adjusting the global
+        # scale of the input before the tanh
+        self.alpha = nn.Parameter(torch.ones(1))
+
+        # γ (gamma) e β (beta): vectors trainable by channel (similar to LayerNorm)
+        self.gamma = nn.Parameter(torch.ones(embed_dim))
+        self.beta = nn.Parameter(torch.zeros(embed_dim))
+
+    def forward(self, x):
+        # equation from the paper: DyT(x) = γ * tanh(α * x) + β
+        return self.gamma * torch.tanh(self.alpha * x) + self.beta
+
+
+class TransformerEncoderBlockDyT(nn.Module):
+    """
+    Transformer block modified to utilize the DyT (Dynamic Tanh) instead of LayerNorm.
+    The Pre-Norm topology is maintained to ensure a fair comparison (Baseline vs DyT).
+    """
+
+    def __init__(self, embed_dim, num_heads, mlp_ratio=4.0, dropout=0.1):
+        super().__init__()
+        # replace the nn.LayerNorm by the DyT class
+        self.norm1 = DyT(embed_dim)
+        self.norm2 = DyT(embed_dim)
+
+        self.attn = nn.MultiheadAttention(
+            embed_dim=embed_dim, num_heads=num_heads, dropout=dropout, batch_first=True
+        )
+
+        hidden_dim = int(embed_dim * mlp_ratio)
+        self.mlp = nn.Sequential(
+            nn.Linear(embed_dim, hidden_dim),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(hidden_dim, embed_dim),
+            nn.Dropout(dropout),
+        )
+
+    def forward(self, x):
+        # 1. Attention Block: DyT -> Attention -> Residual Connection
+        norm_x = self.norm1(x)
+        attn_out, _ = self.attn(norm_x, norm_x, norm_x)
+        x = x + attn_out
+
+        # 2. MLP Block: DyT -> MLP -> Residual Connection
         norm_x = self.norm2(x)
         mlp_out = self.mlp(norm_x)
         x = x + mlp_out
