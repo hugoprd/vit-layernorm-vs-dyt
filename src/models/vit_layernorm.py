@@ -8,7 +8,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(ROOT_DIR))
 
 from logs.cmd.logger_config import setup_logger
-from src.utils.pytorch_extensions import PatchEmbedding, TransformerEncoderBlock
+from src.utils.models_extensions import PatchEmbedding, TransformerEncoderBlock
 
 LOG_NAME = "vit_layernorml_log"
 logger = setup_logger(LOG_NAME, save_to_file=False)
