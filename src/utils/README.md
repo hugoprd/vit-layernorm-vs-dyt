@@ -22,3 +22,15 @@ This directory contains the core modular components (building blocks) for the Vi
 * **Theoretical Concept:** The structure of Self-Attention combined with Feed-Forward Networks (MLP) is rooted in the foundational paper *Attention Is All You Need* (Vaswani et al., 2017).
 * **Pre-LN (Pre-Layer Normalization) Implementation:** The structural decision to apply `nn.LayerNorm` **before** the attention mechanism and **before** the MLP is based on the paper *On Layer Normalization in the Transformer Architecture* (Xiong et al., 2020). This approach stabilizes gradients and training significantly better than the original Post-LN setup.
 * **Experimental Control:** This modular approach establishes a strictly rigorous architectural baseline. It ensures that the central project experiment and adaptations (inspired by the *Transformers Without Normalization* paper) are performed cleanly, isolated, and strictly comparable, without relying on the hidden internal behaviors of native layers (e.g., `nn.TransformerEncoderLayer`).
+
+### 1.3. DyT (Dynamic Tanh)
+
+- **Theoretical Concept:** Proposed in the paper *Transformers without Normalization* (2025). This class replaces traditional normalization approaches (such as LayerNorm)—which rely on computationally expensive calculations of tensor statistics (mean and variance)—with a dynamically scaled Hyperbolic Tangent (Tanh) activation function.
+- **Mathematical Equation:** The implementation strictly follows the paper's formulation: `DyT(x) = γ * tanh(α * x) + β`. Here, `α` (alpha) is a trainable scalar that adjusts the global scale of the input, while `γ` (gamma) and `β` (beta) are trainable channel-wise scale and shift vectors, preserving the network's affine transformation capabilities.
+- **Technical Rationale:** Eliminating classical normalization reduces the computational overhead of calculating statistical moments during the forward and backward passes. The use of a dynamic `alpha` ensures the network can still stably control gradient flow from the very first epochs, effectively preventing vanishing or exploding gradients.
+
+### 1.4. TransformerEncoderBlockDyT
+
+- **Theoretical Concept:** Adapts the classic structure of Self-Attention and Feed-Forward Networks (MLP) to the novel normalization-free paradigm proposed in the 2025 paper.
+- **Pre-DyT Implementation:** Retains the structural Pre-Norm topology (Xiong et al., 2020) but directly replaces the `nn.LayerNorm` instances with our custom `DyT` class, applying the new dynamically scaled function prior to both the attention mechanism and the MLP.
+- **Experimental Control:** The logical and mathematical architecture of this block was kept strictly identical to the baseline control model (`TransformerEncoderBlock`). By altering exclusively the experiment's independent variable (the normalization/scaling mechanism), we guarantee a rigorous and fair testing environment (fair baseline) to accurately compare the direct impacts of DyT on accuracy and computational cost.
