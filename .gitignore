@@ -7,5 +7,9 @@ data/refined/*
 logs/*
 !logs/cmd/
 
+# experiments / results
+experiments/training/*
+experiments/results/*
+
 # caches
 __pycache__
