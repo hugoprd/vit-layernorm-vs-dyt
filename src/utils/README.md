@@ -25,7 +25,7 @@ This directory contains the core modular components (building blocks) for the Vi
 
 ### 1.3. DyT (Dynamic Tanh)
 
-- **Theoretical Concept:** Proposed in the paper *Transformers without Normalization* (2025). This class replaces traditional normalization approaches (such as LayerNorm)—which rely on computationally expensive calculations of tensor statistics (mean and variance)—with a dynamically scaled Hyperbolic Tangent (Tanh) activation function.
+- **Theoretical Concept:** Proposed in the paper *Transformers without Normalization* (2025). This class replaces traditional normalization approaches (such as LayerNorm) which rely on computationally expensive calculations of tensor statistics (mean and variance) with a dynamically scaled Hyperbolic Tangent (Tanh) activation function.
 - **Mathematical Equation:** The implementation strictly follows the paper's formulation: `DyT(x) = γ * tanh(α * x) + β`. Here, `α` (alpha) is a trainable scalar that adjusts the global scale of the input, while `γ` (gamma) and `β` (beta) are trainable channel-wise scale and shift vectors, preserving the network's affine transformation capabilities.
 - **Technical Rationale:** Eliminating classical normalization reduces the computational overhead of calculating statistical moments during the forward and backward passes. The use of a dynamic `alpha` ensures the network can still stably control gradient flow from the very first epochs, effectively preventing vanishing or exploding gradients.
 
