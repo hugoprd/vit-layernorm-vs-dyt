@@ -25,7 +25,7 @@ class PatchEmbedding(nn.Module):
             stride=patch_size,
         )
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
         # Original shape: (batch_size, img_channels, 32, 32)
         x = self.proj(x)
         # Output shape: (batch_size, embed_dim, 8, 8)
@@ -67,7 +67,7 @@ class TransformerEncoderBlock(nn.Module):
             nn.Dropout(dropout),
         )
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
         # 1. Attention Block: Normalizes -> Applies Attention -> Residual Connection
         norm_x = self.norm1(x)
         attn_out, _ = self.attn(norm_x, norm_x, norm_x)
@@ -98,7 +98,7 @@ class DyT(nn.Module):
         self.gamma = nn.Parameter(torch.ones(embed_dim))
         self.beta = nn.Parameter(torch.zeros(embed_dim))
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
         # equation from the paper: DyT(x) = γ * tanh(α * x) + β
         return self.gamma * torch.tanh(self.alpha * x) + self.beta
 
@@ -128,7 +128,7 @@ class TransformerEncoderBlockDyT(nn.Module):
             nn.Dropout(dropout),
         )
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
         # 1. Attention Block: DyT -> Attention -> Residual Connection
         norm_x = self.norm1(x)
         attn_out, _ = self.attn(norm_x, norm_x, norm_x)
