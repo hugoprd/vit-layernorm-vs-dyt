@@ -8,6 +8,8 @@ This directory contains the core modular components (building blocks) for the Vi
 * [1. Classes](#1-classes)
     * [1.1. PatchEmbedding](#11-patchembedding)
     * [1.2. TransformerEncoderBlock](#12-transformerencoderblock)
+    * [1.3. DyT](#13-dyt-dynamic-tanh)
+    * [1.4. TransformerEncoderBlockDyT](#14-transformerencoderblockdyt)
 
 ## 1. Classes
 
