@@ -104,7 +104,7 @@ def get_model(model_name: str, device: torch.device) -> nn.Module:
     return model
 
 
-def calculate_macs_params(model, device, data_loader):
+def calculate_macs_params(model, device, data_loader) -> tuple[float, float]:
     """
     Calculates the theoretical computational complexity of the model.
     """
