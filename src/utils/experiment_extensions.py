@@ -4,6 +4,33 @@ import psutil
 import torch
 
 
+class EarlyStopping:
+    def __init__(self, patience=10, min_delta=0.0):
+        """
+        patience: how many epochs to wait without improvement before stopping.
+        min_delta: minimum difference to be considered an improvement.
+        """
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.best_loss = float("inf")
+        self.early_stop = False
+
+    def __call__(self, val_loss):
+        if val_loss < self.best_loss - self.min_delta:
+            self.best_loss = val_loss
+            self.counter = 0
+
+            return True
+        else:
+            self.counter += 1
+
+            if self.counter >= self.patience:
+                self.early_stop = True
+
+            return False
+
+
 def log_system_specs(logger):
     """
     Capture and log the hardware specifications of the machine

@@ -21,7 +21,7 @@ sys.path.append(str(ROOT_DIR))
 from logs.cmd.logger_config import setup_logger
 from src.models.vit_layernorm import ViT_LayerNorm
 from src.models.vit_dyt import ViT_DyT
-from src.utils.experiment_extensions import log_system_specs
+from src.utils.experiment_extensions import EarlyStopping, log_system_specs
 
 # 1. Hyperparameters and Config
 parser = argparse.ArgumentParser(description="Training ViT CIFAR-10")
@@ -29,6 +29,12 @@ parser.add_argument("--model", type=str, choices=["layernorm", "dyt"], required=
 parser.add_argument("--epochs", type=int, default=50)
 parser.add_argument("--batch_size", type=int, default=128)
 parser.add_argument("--lr", type=float, default=3e-4)
+parser.add_argument(
+    "--patience", type=int, default=16, help="Epochs of tolerance for Early Stopping"
+)
+parser.add_argument(
+    "--timestamp", type=str, required=True, help="Unique experiment identifier."
+)
 args = parser.parse_args()
 
 log_name = f"{args.model}_train_log"
@@ -123,13 +129,13 @@ def calculate_macs_params(model, device, data_loader) -> tuple[float, float]:
 
 
 def train():
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    experiments_training_dir = Path("experiments") / "training" / f"{args.model}_{timestamp}"
+    experiments_training_dir = (
+        Path("experiments") / "training" / f"{args.model}_{args.timestamp}"
+    )
     experiments_training_dir.mkdir(parents=True, exist_ok=True)
 
-    csv_metrics_path = experiments_training_dir / f"{args.model}_metrics_{timestamp}.csv"
-    csv_summary_path = experiments_training_dir / f"training_cost_summary_{timestamp}.csv"
+    csv_metrics_path = experiments_training_dir / f"{args.model}_metrics_{args.timestamp}.csv"
+    csv_summary_path = experiments_training_dir / f"training_cost_summary_{args.timestamp}.csv"
 
     log_system_specs(logger)
 
@@ -161,6 +167,10 @@ def train():
     metric_f1 = MulticlassF1Score(num_classes=10, average="macro").to(device)
 
     # 5. Training Loop
+    model_save_path = experiments_training_dir / f"{args.model}_best_weights.pth"
+
+    early_stopping = EarlyStopping(patience=args.patience)
+
     experiment_start_time = time.time()
     for epoch in range(1, args.epochs + 1):
         model.train()
@@ -224,6 +234,19 @@ def train():
 
         log_epoch_to_csv(csv_metrics_path, epoch, epoch_metrics)
 
+        is_best = early_stopping(avg_val_loss)
+
+        if is_best:
+            torch.save(model.state_dict(), model_save_path)
+
+        if early_stopping.early_stop:
+            logger.info(
+                f"Early stopping activated. No improvements for {args.patience} epochs."
+            )
+            logger.info(f"Training interrupted at epoch {epoch}.")
+
+            break
+
     # 7. Stopping Energy Tracker
     emissions = tracker.stop()
 
@@ -243,6 +266,7 @@ def train():
 
     log_summary_to_csv(csv_summary_path, args.model, summary_metrics)
 
+    logger.info(f"Model weights saved to: {model_save_path}")
     logger.info(f"Metrics saved locally to: {csv_metrics_path}")
     logger.info(f"Summary cost metrics saved locally to: {csv_summary_path}")
     logger.info("Training completed successfully.")
