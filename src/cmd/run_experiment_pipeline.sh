@@ -6,7 +6,7 @@ set -e
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 # experiment configuration
-EPOCHS=2
+EPOCHS=64
 BATCH_SIZE=128
 LR="3e-4" # learning rate (LR) -> 3e-4 = 0.0003
 

@@ -5,8 +5,6 @@ from pathlib import Path
 import torch
 import torch.nn as nn  # noqa E401
 from torch.utils.data import DataLoader
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 from torchmetrics.classification import (
     MulticlassAccuracy,
@@ -21,6 +19,11 @@ sys.path.append(str(ROOT_DIR))
 from logs.cmd.logger_config import setup_logger
 from src.models.vit_layernorm import ViT_LayerNorm
 from src.models.vit_dyt import ViT_DyT
+from src.utils.experiment_extensions import (
+    plot_confusion_matrix,
+    plot_roc_curves,
+    plot_training_curves,
+)
 
 logger = setup_logger("evaluate_log", save_to_file=True)
 
@@ -55,42 +58,6 @@ def load_test_data(data_dir: Path, batch_size: int) -> DataLoader:
     test_dataset = torch.load(data_dir / "test_data.pt", weights_only=False)
 
     return DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-
-
-def plot_confusion_matrix(conf_matrix, save_path):
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(
-        conf_matrix,
-        annot=True,
-        fmt="d",
-        cmap="Blues",
-        xticklabels=CIFAR10_CLASSES,
-        yticklabels=CIFAR10_CLASSES,
-    )
-    plt.ylabel("True Label")
-    plt.xlabel("Predicted Label")
-    plt.title("Confusion Matrix")
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=300)
-    plt.close()
-
-
-def plot_roc_curves(fpr, tpr, save_path):
-    plt.figure(figsize=(10, 8))
-
-    for i in range(10):
-        plt.plot(fpr[i].cpu(), tpr[i].cpu(), lw=2, label=f"{CIFAR10_CLASSES[i]}")
-
-    plt.plot([0, 1], [0, 1], color="navy", lw=2, linestyle="--")
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel("False Positive Rate (FPR)")
-    plt.ylabel("True Positive Rate (TPR)")
-    plt.title("ROC Curves (One-vs-Rest) Multiclass")
-    plt.legend(loc="lower right", fontsize="small")
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=300)
-    plt.close()
 
 
 def evaluate():
@@ -151,12 +118,16 @@ def evaluate():
 
     # 6. Generating and Saving the Graphs
     cm_path = experiments_evaluate_dir / "confusion_matrix.png"
-    plot_confusion_matrix(conf_matrix, cm_path)
+    plot_confusion_matrix(conf_matrix, CIFAR10_CLASSES, cm_path)
     logger.info(f"Confusion Matrix saved to: {cm_path}")
 
     roc_path = experiments_evaluate_dir / "roc_curves.png"
-    plot_roc_curves(fpr, tpr, roc_path)
+    plot_roc_curves(fpr, tpr, CIFAR10_CLASSES, roc_path)
     logger.info(f"ROC Curves saved to: {roc_path}")
+
+    training_dir = Path(args.weights).parent
+    metrics_csv_path = training_dir / f"{args.model}_metrics_{args.timestamp}.csv"
+    plot_training_curves(CIFAR10_CLASSES, metrics_csv_path, experiments_evaluate_dir, logger)
 
     logger.info("Evaluation completed successfully.")
 
